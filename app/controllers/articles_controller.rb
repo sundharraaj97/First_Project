@@ -23,7 +23,6 @@ class ArticlesController < ApplicationController
   # POST /articles or /articles.json
   def create
     @article = Article.new(article_params)
-
     respond_to do |format|
       if @article.save
         format.html { redirect_to article_url(@article), notice: "Article was successfully created." }
@@ -33,6 +32,7 @@ class ArticlesController < ApplicationController
         format.json { render json: @article.errors, status: :unprocessable_entity }
       end
     end
+    UserMailer.article_submission_mailer(current_user, @article).deliver_later
   end
 
   # PATCH/PUT /articles/1 or /articles/1.json
